@@ -11,12 +11,9 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
-<<<<<<< HEAD
   local_auth: ^1.1.7
   get_it: ^7.2.0
-=======
   splashscreen: ^1.3.5
->>>>>>> 3e13baf8fb55c68b11a1a35b456797e28e9c43c7
 
 dev_dependencies:
   flutter_test:
