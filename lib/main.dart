@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pass_keep/screens/splash_screen.dart';
+import 'screens/home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,23 +11,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Pass Keep',
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      home: MyHomePage(),
+      home: SplashScreenPage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold();
-  }
-}
