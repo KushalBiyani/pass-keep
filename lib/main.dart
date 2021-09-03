@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:pass_keep/screens/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,6 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Pass Keep',
       theme: ThemeData(
         primarySwatch: Colors.teal,
@@ -36,9 +38,7 @@ class _FingerPrintAuthState extends State<FingerPrintAuth> {
       if (authenticated) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder: (context) => const Center(
-              child: Text("Authenticated"),
-            ),
+            builder: (context) => SplashScreenPage(),
           ),
         );
       } else {
