@@ -23,6 +23,6 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
         image: Image.asset('assets/images/splashScreen.png'),
         backgroundColor: Colors.black,
         photoSize: 160.0,
-        loaderColor: Colors.teal);
+        loaderColor: Colors.tealAccent);
   }
 }
