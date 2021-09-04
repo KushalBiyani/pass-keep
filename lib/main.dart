@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pass_keep/screens/splash_screen.dart';
-import 'screens/auth/fingerprint_lock_screen.dart';
 
-void main() {
+import 'model/master_pin.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  Hive.registerAdapter(MasterPinAdapter());
+
+  await Hive.openBox<MasterPin>('MasterPin');
   runApp(const MyApp());
 }
 
@@ -20,4 +27,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

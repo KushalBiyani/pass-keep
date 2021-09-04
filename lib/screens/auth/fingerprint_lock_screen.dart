@@ -4,6 +4,8 @@ import 'package:pass_keep/screens/home_page.dart';
 import 'package:pass_keep/helper/constants.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 
+import '../../boxes.dart';
+
 class FingerPrintAuth extends StatefulWidget {
   @override
   _FingerPrintAuthState createState() => _FingerPrintAuthState();
@@ -35,7 +37,7 @@ class _FingerPrintAuthState extends State<FingerPrintAuth> {
             "ERROR",
           ),
           content: const Text(
-            "You need to setup either PIN or Fingerprint Authentication to be able to use this App !\nWe are doing this for your safety 🙂",
+            "Something Went Wrong",
           ),
           actions: [
             TextButton(
@@ -53,20 +55,15 @@ class _FingerPrintAuthState extends State<FingerPrintAuth> {
   }
 
   @override
-  void initState() {
-    authenticate();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
         title: const Text("Verify Identity"),
       ),
+      resizeToAvoidBottomInset: false,
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
             padding: const EdgeInsets.all(20.0),
@@ -76,99 +73,97 @@ class _FingerPrintAuthState extends State<FingerPrintAuth> {
             ),
             child: Image.asset(
               'assets/images/splashScreen.png',
-              width: 250,
+              width: 200,
             ),
           ),
           //
           const SizedBox(
             height: 20.0,
           ),
-          //
-          if (!authenticated)
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Text(
-                  "Please Enter Your 5 Digit Master Pin To Continue.",
-                  style: kAuthenticationMessageStyle,
-                  textAlign: TextAlign.center,
-                ),
-                //
-                const SizedBox(
-                  height: 40.0,
-                ),
-                //
-                OtpTextField(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Text(
+                "Enter Your Master Pin",
+                style: kAuthenticationMessageStyle,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 30.0,
+              ),
+              OtpTextField(
                   numberOfFields: 5,
                   focusedBorderColor: Colors.tealAccent,
                   enabledBorderColor: Colors.tealAccent,
                   textStyle:
                       TextStyle(color: Colors.white, fontFamily: 'Electrolize'),
-                  //set to true to show as box or false to show as dash
                   showFieldAsBox: true,
-                  //runs when a code is typed in
-                  onCodeChanged: (String code) {
-                    //handle validation or checks here
-                  },
-                  //runs when every textfield is filled
                   onSubmit: (String verificationCode) {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text("Verification Code"),
-                          content: Text('Code entered is $verificationCode'),
+                    var box = Boxes.getMasterPin();
+                    int pin = box.get('key')!.pin;
+                    if (int.parse(verificationCode) == pin) {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => HomePage(),
+                        ),
+                      );
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text(
+                            "Invalid Master Pin",
+                          ),
                           actions: [
                             TextButton(
-                              onPressed: () {},
-                              child: Text('Cancel'),
-                            ),
-                            TextButton(
-                              onPressed: () {},
-                              child: Text('OK'),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text(
+                                "Try Again",
+                              ),
                             ),
                           ],
-                        );
-                      },
-                    );
-                  }, // end onSubmit
+                        ),
+                      );
+                    }
+                  }),
+              SizedBox(
+                height: 25,
+              ),
+              Text(
+                'OR',
+                style:
+                    kLoginScreenBottomTextStyle.copyWith(color: Colors.white),
+              ),
+              SizedBox(
+                height: 25,
+              ),
+              Text(
+                'Login Using Fingerprint',
+                style: kLoginScreenBottomTextStyle,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              TextButton(
+                onPressed: () {
+                  authenticate();
+                },
+                child: Icon(
+                  Icons.fingerprint,
+                  size: 50,
+                  color: Colors.tealAccent,
                 ),
-                SizedBox(
-                  height: 50,
-                ),
-                Text(
-                  'OR',
-                  style:
-                      kLoginScreenBottomTextStyle.copyWith(color: Colors.white),
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                Text(
-                  'Login Using Fingerprint',
-                  style: kLoginScreenBottomTextStyle,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                TextButton(
-                  onPressed: () {
-                    authenticate();
-                  },
-                  child: Icon(
-                    Icons.fingerprint,
-                    size: 50,
-                    color: Colors.tealAccent,
-                  ),
-                  style: ButtonStyle(
-                    overlayColor: MaterialStateProperty.all(
-                      Colors.white,
-                    ),
+                style: ButtonStyle(
+                  overlayColor: MaterialStateProperty.all(
+                    Colors.white,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
+          ),
         ],
       ),
     );

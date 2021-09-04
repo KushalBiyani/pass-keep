@@ -7,8 +7,8 @@ const kSplashScreenStyle = TextStyle(
 );
 
 const kAuthenticationMessageStyle = TextStyle(
-  color: Colors.white70,
-  fontSize: 32.0,
+  color: Colors.white,
+  fontSize: 25.0,
   fontFamily: "Electrolize",
   fontWeight: FontWeight.w800,
 );
@@ -21,4 +21,4 @@ const kTryAgainButtonTextStyle = TextStyle(
 );
 
 const kLoginScreenBottomTextStyle =
-    TextStyle(color: Colors.white70, fontSize: 22, fontFamily: 'Electrolize');
+    TextStyle(color: Colors.white, fontSize: 22, fontFamily: 'Electrolize');
