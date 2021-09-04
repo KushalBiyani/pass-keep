@@ -19,3 +19,6 @@ const kTryAgainButtonTextStyle = TextStyle(
   color: Colors.tealAccent,
   fontSize: 22.0,
 );
+
+const kLoginScreenBottomTextStyle =
+    TextStyle(color: Colors.white70, fontSize: 22, fontFamily: 'Electrolize');

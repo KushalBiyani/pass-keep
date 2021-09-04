@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pass_keep/helper/constants.dart';
-import 'package:splashscreen/splashscreen.dart';
-import 'home_page.dart';
+import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:pass_keep/screens/auth/fingerprint_lock_screen.dart';
+import 'package:pass_keep/screens/auth/setup_pin_screen.dart';
 
 class SplashScreenPage extends StatefulWidget {
   static const id = 'splashScreenPage';
@@ -13,16 +13,13 @@ class SplashScreenPage extends StatefulWidget {
 class _SplashScreenPageState extends State<SplashScreenPage> {
   @override
   Widget build(BuildContext context) {
-    return SplashScreen(
-        seconds: 2,
-        navigateAfterSeconds: HomePage(),
-        title: Text(
-          'Pass Keep',
-          style: kSplashScreenStyle,
-        ),
-        image: Image.asset('assets/images/splashScreen.png'),
-        backgroundColor: Colors.black,
-        photoSize: 160.0,
-        loaderColor: Colors.tealAccent);
+    return AnimatedSplashScreen(
+      splash: 'assets/images/splashScreen.png',
+      nextScreen: FingerPrintAuth(),
+      splashTransition: SplashTransition.scaleTransition,
+      backgroundColor: Colors.black,
+      splashIconSize: 200,
+      duration: 2000,
+    );
   }
 }
