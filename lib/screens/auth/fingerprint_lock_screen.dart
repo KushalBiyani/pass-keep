@@ -1,8 +1,10 @@
+import 'package:encrypt/encrypt.dart';
 import 'package:flutter/material.dart';
-import 'package:local_auth/local_auth.dart';
 import 'package:pass_keep/screens/home_page.dart';
 import 'package:pass_keep/helper/constants.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:pass_keep/utils/master_pin_util.dart';
+import 'package:pass_keep/widget/fingerprint_widget.dart';
 
 import '../../boxes.dart';
 
@@ -13,46 +15,6 @@ class FingerPrintAuth extends StatefulWidget {
 
 class _FingerPrintAuthState extends State<FingerPrintAuth> {
   bool authenticated = false;
-  Future<void> authenticate() async {
-    try {
-      var localAuth = LocalAuthentication();
-      authenticated = await localAuth.authenticate(
-        localizedReason: 'Please authenticate to view your Passwords',
-        useErrorDialogs: true,
-      );
-      if (authenticated) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => HomePage(),
-          ),
-        );
-      } else {
-        setState(() {});
-      }
-    } catch (e) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text(
-            "ERROR",
-          ),
-          content: const Text(
-            "Something Went Wrong",
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text(
-                "Ok",
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +22,7 @@ class _FingerPrintAuthState extends State<FingerPrintAuth> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         title: const Text("Verify Identity"),
+        centerTitle: true,
       ),
       resizeToAvoidBottomInset: false,
       body: Column(
@@ -76,37 +39,32 @@ class _FingerPrintAuthState extends State<FingerPrintAuth> {
               width: 200,
             ),
           ),
-          //
-          const SizedBox(
-            height: 20.0,
-          ),
+          kheight(20.0),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text(
+              Text(
                 "Enter Your Master Pin",
-                style: kAuthenticationMessageStyle,
+                style: ktextStyle(22),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(
-                height: 30.0,
-              ),
+              kheight(30),
               OtpTextField(
                   numberOfFields: 5,
                   focusedBorderColor: Colors.tealAccent,
                   enabledBorderColor: Colors.tealAccent,
-                  textStyle:
-                      TextStyle(color: Colors.white, fontFamily: 'Electrolize'),
+                  textStyle: ktextStyle(18),
                   showFieldAsBox: true,
                   onSubmit: (String verificationCode) {
                     var box = Boxes.getMasterPin();
-                    int pin = box.get('key')!.pin;
-                    if (int.parse(verificationCode) == pin) {
-                      Navigator.of(context).pushReplacement(
+                    String pin = box.get('key')!.pin;
+                    if (verificationCode == dencryptMasterPin(pin)) {
+                      Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
                           builder: (context) => HomePage(),
                         ),
+                        ModalRoute.withName('/'),
                       );
                     } else {
                       showDialog(
@@ -120,38 +78,29 @@ class _FingerPrintAuthState extends State<FingerPrintAuth> {
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              child: const Text(
-                                "Try Again",
-                              ),
+                              child: const Text("Try Again"),
                             ),
                           ],
                         ),
                       );
                     }
                   }),
-              SizedBox(
-                height: 25,
-              ),
+              kheight(25),
               Text(
                 'OR',
-                style:
-                    kLoginScreenBottomTextStyle.copyWith(color: Colors.white),
+                style: ktextStyle(20),
               ),
-              SizedBox(
-                height: 25,
-              ),
+              kheight(25),
               Text(
                 'Login Using Fingerprint',
-                style: kLoginScreenBottomTextStyle,
+                style: ktextStyle(20),
               ),
-              SizedBox(
-                height: 10,
-              ),
+              kheight(10),
               TextButton(
                 onPressed: () {
-                  authenticate();
+                  authenticate(authenticated, context);
                 },
-                child: Icon(
+                child: const Icon(
                   Icons.fingerprint,
                   size: 50,
                   color: Colors.tealAccent,

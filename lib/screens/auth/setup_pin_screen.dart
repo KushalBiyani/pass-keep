@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:pass_keep/helper/constants.dart';
 import 'package:pass_keep/model/master_pin.dart';
+import 'package:pass_keep/utils/master_pin_util.dart';
 import '../../boxes.dart';
 import '../home_page.dart';
 
@@ -24,60 +26,51 @@ class _SetPinScreenState extends State<SetPinScreen> {
               'assets/images/splashScreen.png',
               width: 250,
             ),
-            SizedBox(
-              height: 30,
-            ),
+            kheight(30),
             Text(
               'Setup Master Pin',
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Electrolize',
-                fontSize: 25,
-              ),
+              style: ktextStyle(25),
             ),
-            SizedBox(
-              height: 30,
-            ),
+            kheight(30),
             OtpTextField(
               numberOfFields: 5,
               focusedBorderColor: Colors.tealAccent,
-              textStyle:
-                  TextStyle(color: Colors.white, fontFamily: 'Electrolize'),
+              textStyle: ktextStyle(20),
               showFieldAsBox: true,
-
               onSubmit: (String masterPin) {
                 showDialog(
                   context: context,
                   builder: (context) {
                     return AlertDialog(
-                      title: Text("Verification Code"),
+                      title: const Text("Verification Code"),
                       content: Text('Code entered is $masterPin'),
                       actions: [
                         TextButton(
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          child: Text('Cancel'),
+                          child: const Text('Cancel'),
                         ),
                         TextButton(
                           onPressed: () {
                             final box = Boxes.getMasterPin();
                             final myPin = MasterPin()
-                              ..pin = int.parse(masterPin);
+                              ..pin = encryptMasterPin(masterPin);
                             box.put('key', myPin);
-                            Navigator.of(context).pushReplacement(
+                            Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                 builder: (context) => HomePage(),
                               ),
+                              ModalRoute.withName('/'),
                             );
                           },
-                          child: Text('OK'),
+                          child: const Text('OK'),
                         ),
                       ],
                     );
                   },
                 );
-              }, // end onSubmit
+              },
             ),
           ],
         ),

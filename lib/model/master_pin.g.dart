@@ -16,7 +16,7 @@ class MasterPinAdapter extends TypeAdapter<MasterPin> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return MasterPin()..pin = fields[0] as int;
+    return MasterPin()..pin = fields[0] as String;
   }
 
   @override

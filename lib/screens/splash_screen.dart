@@ -7,9 +7,7 @@ import '../boxes.dart';
 
 class SplashScreenPage extends StatefulWidget {
   static const id = 'splashScreenPage';
-
   const SplashScreenPage({Key? key}) : super(key: key);
-
   @override
   State<SplashScreenPage> createState() => _SplashScreenPageState();
 }
@@ -17,7 +15,6 @@ class SplashScreenPage extends StatefulWidget {
 class _SplashScreenPageState extends State<SplashScreenPage> {
   bool isKey = false;
   final box = Boxes.getMasterPin();
-
   @override
   void initState() {
     var pin = box.get('key');
@@ -31,11 +28,11 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
   Widget build(BuildContext context) {
     return AnimatedSplashScreen(
       splash: 'assets/images/splashScreen.png',
-      nextScreen: isKey ? FingerPrintAuth() : SetPinScreen(),
+      nextScreen: isKey ? FingerPrintAuth() : const SetPinScreen(),
       splashTransition: SplashTransition.scaleTransition,
       backgroundColor: Colors.black,
       splashIconSize: 200,
-      duration: 1000,
+      duration: 500,
     );
   }
 }
